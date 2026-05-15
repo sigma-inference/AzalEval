@@ -1,15 +1,31 @@
-# AzelEval (🛡️ SIGMA-Inference Framework)
+# AzelEval: Anti-Fragile Benchmarking for LLM Integrity 🛡️
 
-**AzelEval** is a high-precision, anti-fragile benchmarking framework designed to evaluate the internal stability and contextual integrity of Large Language Models (LLMs).
+**AzelEval** is a sophisticated, open-source framework designed to stress-test Large Language Models (LLMs) against contextual drift, sycophancy, and prompt injection vulnerabilities. 
 
-## 🚀 Key Features
-* **Dynamic Payload Synthesis:** Prevents model memorization through randomized semantic structures.
-* **Contextual Sycophancy Mitigation:** Tests the model's ability to remain objective under conflicting instructions.
-* **Immutable Protocol Enforcement:** Validates if the LLM respects system-level constraints over user-injected noise.
+Developed under the **SIGMA-Inference** philosophy, this tool prioritizes "Anti-Fragility"—ensuring that AI models maintain their logical invariants even when subjected to high-entropy, deceptive environments.
 
-## 🛠️ Quick Start
-1. Clone the repository.
-2. Set your `OPENAI_API_KEY`.
-3. Run the evaluator:
+## 🔬 Core Methodology
+AzelEval utilizes **Dynamic Semantic Shifting**. Unlike static benchmarks, it generates real-time payloads that:
+- **Challenge Logical Continuity:** By embedding conflicting "immutable protocols" within untrusted noise.
+- **Prevent Memorization:** Payloads are randomized and swap semantic roles to bypass template-based model responses.
+- **Quantify Integrity:** Measures the model's ability to prioritize system-level instructions over deceptive user inputs.
+
+## 🛠️ Technical Architecture
+The core engine resides in `src/evaluator.py`, featuring:
+- **Zero-Temperature Execution:** Ensuring deterministic and reproducible evaluation.
+- **Modular Payload Synthesis:** Easily extendable for various financial, legal, or security-based test cases.
+- **Security-First Design:** Implements environment-variable based API handling to protect developer credentials.
+
+## 🚀 Deployment
+1. Clone the repository:
    ```bash
-   python src/evaluator.py
+   git clone [https://github.com/sigma-inference/AzelEval.git](https://github.com/sigma-inference/AzelEval.git)
+
+Configure your environment:
+export OPENAI_API_KEY='your_secret_key'
+
+Execute the evaluator
+python src/evaluator.py
+
+⚖️ License
+​This project is licensed under the MIT License - fostering transparency and robust AI safety research.

@@ -13,10 +13,7 @@ AzalEval utilizes Dynamic Semantic Shifting. Unlike static benchmarks, it genera
 
 ## 🛠️ Technical Architecture
 The core engine resides in `src/evaluator.py`, featuring:
-export OPENAI_API_KEY='your_secret_key'
-python src/evaluator.py
-⚖️ License
-​This project is licensed under the MIT License - fostering transparency and robust AI safety research.
+
 * **Zero-Temperature Execution:** Ensuring deterministic and reproducible evaluation.
 * **Modular Payload Synthesis:** Easily extendable for various financial, legal, or security-based test cases.
 * **Security-First Design:** Implements environment-variable based API handling to protect developer credentials.
@@ -26,3 +23,11 @@ Clone the repository:
 ```bash
 git clone [https://github.com/sigma-inference/AzalEval.git](https://github.com/sigma-inference/AzalEval.git)
 
+Configure your environment:
+export OPENAI_API_KEY='your_secret_key'
+
+Execute the evaluator:
+python src/evaluator.py
+
+⚖️ License
+​This project is licensed under the MIT License - fostering transparency and robust AI safety research.

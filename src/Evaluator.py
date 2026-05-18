@@ -17,7 +17,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 11-Trap Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 12-Trap Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -177,27 +177,41 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Exponent alignment verified.")
 
     def run_activation_gradient_leak_trap(self):
-        """فخ تسريب انحراف دالة التنشيط: يحاكي مشتقة دالة السيجمويد عند أطراف النطاق لقنص التلاشي والتشتت العددي"""
         self.log_and_print("\n[⏳] 11. Running Activation Function Gradient Leak Trap...")
-        # هندسة قيمة حساسة جداً قريبة من حافة الخنق الحركي
         x = 45.0 
         try:
-            # دالة Sigmoid محاكة يدوياً: 1 / (1 + e^-x)
             sigmoid = 1.0 / (1.0 + math.exp(-x))
-            # مشتقة السيجمويد النقدية: s * (1 - s)
             gradient = sigmoid * (1.0 - sigmoid)
-            
             self.log_and_print(f"   -> Activation (Sigmoid): {sigmoid:.18f}")
             self.log_and_print(f"   -> Computed Gradient:    {gradient:.18f}")
-            
             if gradient == 0.0:
                 self.log_and_print("   [\033[1;31m❌ GRADIENT VANISHING HOLE\033[0m] Floating precision completely choked to absolute zero!")
             elif gradient < 1e-15:
-                self.log_and_print("   [\033[1;31m❌ GRADIENT PRECISION LEAK\033[0m] Extreme underflow distortion in backpropagation path.")
+                self.log_and_print("   [\033[1;31m❌ GRADIENT PRECISION LEAK\033[0m] Extreme underflow distortion.")
             else:
                 self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Gradient resolution verified.")
         except Exception as e:
             self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Math bounds broken: {e}")
+
+    def run_context_window_drift_trap(self):
+        """فخ انحراف نافذة السياق: يحاكي تشتت فهارس مواقع الكلمات عبر تكرار تراكمي لخطوات التموضع الطويل"""
+        self.log_and_print("\n[⏳] 12. Running Context Window Indexing Drift Trap...")
+        step = 0.0001
+        index_ptr = 0.0
+        # محاكاة لـ 128k نافذة سياق حركية عبر تجميع خطي دقيق
+        for _ in range(131072):
+            index_ptr += step
+        expected_ptr = 0.0001 * 131072
+        index_drift = abs(index_ptr - expected_ptr)
+        
+        self.log_and_print(f"   -> Theoretical Index: {expected_ptr:.18f}")
+        self.log_and_print(f"   -> Accumulated Pointer: {index_ptr:.18f}")
+        self.log_and_print(f"   -> Context Drift Gap:   {index_drift:.18f}")
+        
+        if index_drift > 1e-11:
+            self.log_and_print("   [\033[1;31m❌ CONTEXT POSITION DRIFT\033[0m] Indexing tracking corrupted! Model long-term memory misaligned.")
+        else:
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Context memory pointers fully locked.")
 
     def save_report(self):
         try:
@@ -208,7 +222,7 @@ class AzalEvalEnterpriseEngine:
             print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 11-TRAP PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 12-TRAP PIPELINE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -223,10 +237,11 @@ def run_evaluation():
     engine.run_pseudo_symmetric_trap()
     engine.run_directed_exponent_erosion_trap()
     engine.run_activation_gradient_leak_trap()
+    engine.run_context_window_drift_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - 11 Traps Complete Core Executed Successfully  🏁    ")
+    print("    🏁  AzalEval - 12 Traps Complete Core Executed Successfully  🏁    ")
     print("="*65)

@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import struct
 
 def get_secure_token():
     token = os.getenv("GITHUB_TOKEN")
@@ -15,7 +16,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Multi-Trap Stress Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate Bitwise Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -109,34 +110,48 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Hardware intercepted crash: {e}")
 
     def run_matrix_drift_trap(self, steps=500):
-        """فخ تآكل المصفوفات البحت: يحاكي ضرب وتدوير مصفوفة الأوزان لرصد أخطاء الفقدان المتراكم"""
         self.log_and_print(f"\n[⏳] 7. Running Pure Python Matrix Drift Trap ({steps} steps)...")
-        # مصفوفة هوية مشوهة بأرقام عشرية دورية ثنائياً
         matrix_pure = [[0.1, 0.2], [0.3, 0.4]]
         initial_trace = matrix_pure[0][0] + matrix_pure[1][1]
-        
         start_time = time.time()
         for _ in range(steps):
-            # عملية تحويل خطي متكررة (Linear Transformation Core)
             a = matrix_pure[0][0] * 0.99 + matrix_pure[0][1] * 0.01
             b = matrix_pure[0][1] * 0.99 - matrix_pure[0][0] * 0.01
             c = matrix_pure[1][0] * 0.99 + matrix_pure[1][1] * 0.01
             d = matrix_pure[1][1] * 0.99 - matrix_pure[1][0] * 0.01
             matrix_pure = [[a, b], [c, d]]
         end_time = time.time()
-        
         final_trace = matrix_pure[0][0] + matrix_pure[1][1]
         matrix_drift = abs(initial_trace - final_trace)
-        
         self.log_and_print(f"   -> Initial Trace: {initial_trace:.18f}")
         self.log_and_print(f"   -> Final Trace:   {final_trace:.18f}")
         self.log_and_print(f"   -> Matrix Drift:  {matrix_drift:.18f}")
-        self.log_and_print(f"   -> Matrix Cost:   {end_time - start_time:.4f}s")
-        
         if matrix_drift > 1e-10:
-            self.log_and_print("   [\033[1;31m❌ MATRIX PRECISION LEAK\033[0m] Weight erosion confirmed! Latent space corrupted.")
+            self.log_and_print("   [\033[1;31m❌ MATRIX PRECISION LEAK\033[0m] Weight erosion confirmed!")
         else:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Matrix space stable.")
+
+    def run_bitwise_mantissa_trap(self):
+        """فخ تشويه الأعداد الثنائية: يحلل خانات الـ Mantissa بدقة تفكيك ثنائية لرصد التآكل الهيكلي"""
+        self.log_and_print("\n[⏳] 8. Running IEEE 754 Bitwise Mantissa Corruptor...")
+        val = 0.1
+        # تفكيك الرقم العشري إلى 64-bit ثنائية صافية بالكامل
+        binary_bits = bin(struct.unpack('!Q', struct.pack('!d', val))[0])[2:].zfill(64)
+        initial_mantissa = binary_bits[12:]
+        
+        # إجراء عملية حسابية بسيطة تعيد نفس القيمة نظرياً
+        corrupted_val = (val * 10.0) / 10.0
+        corrupted_bits = bin(struct.unpack('!Q', struct.pack('!d', corrupted_val))[0])[2:].zfill(64)
+        final_mantissa = corrupted_bits[12:]
+        
+        self.log_and_print(f"   -> Initial Mantissa Bits: {initial_mantissa[:20]}...")
+        self.log_and_print(f"   -> Final Mantissa Bits:   {final_mantissa[:20]}...")
+        
+        if initial_mantissa != final_mantissa:
+            self.log_and_print("   [\033[1;31m❌ BITWISE MANTISSA CORRUPTION\033[0m] Hidden bits altered! Model logical layer compromised.")
+        else:
+            # في بايثون الصافية التشويه بيظهر عند دمج حركي طويل، هنقيس الفارق المباشر
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Static bit architecture aligned.")
 
     def save_report(self):
         try:
@@ -158,6 +173,7 @@ def run_evaluation():
     engine.run_alternating_series_trap()
     engine.run_overflow_infinity_trap()
     engine.run_matrix_drift_trap()
+    engine.run_bitwise_mantissa_trap()
     engine.save_report()
 
 if __name__ == "__main__":

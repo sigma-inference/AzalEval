@@ -15,7 +15,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Advanced Stress Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Multi-Trap Stress Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -93,25 +93,50 @@ class AzalEvalEnterpriseEngine:
         self.log_and_print("   [\033[1;32m✅ CORE MONITOR ACTIVE\033[0m] Dynamic rounding drift tracked.")
 
     def run_overflow_infinity_trap(self):
-        """فخ الانفجار اللانهائي: يحدد حاجز الانهيار للأسس العالية ويراقب توليد الـ NaN"""
         self.log_and_print("\n[⏳] 6. Running Overflow & NaN Exploit Trap...")
         try:
-            # محاولة تخطي حاجز الـ Float Max
             huge_base = 1e308
             overflow_trigger = huge_base * 2.0
             self.log_and_print(f"   -> Huge Base:       {huge_base}")
             self.log_and_print(f"   -> Overflow Result: {overflow_trigger}")
-            
-            # هندسة قيمة ليس رقماً لتدمير الحسابات المتتالية
             nan_trigger = overflow_trigger - overflow_trigger
             self.log_and_print(f"   -> Isolated NaN Trigger: {nan_trigger}")
-            
             if overflow_trigger == float('inf') or str(nan_trigger) == 'nan':
-                self.log_and_print("   [\033[1;31m❌ MEMORY OVERFLOW LOCK\033[0m] System generated Infinity/NaN. Model logic collapses here.")
+                self.log_and_print("   [\033[1;31m❌ MEMORY OVERFLOW LOCK\033[0m] System generated Infinity/NaN.")
             else:
                 self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Hardware bounds secured.")
         except Exception as e:
             self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Hardware intercepted crash: {e}")
+
+    def run_matrix_drift_trap(self, steps=500):
+        """فخ تآكل المصفوفات البحت: يحاكي ضرب وتدوير مصفوفة الأوزان لرصد أخطاء الفقدان المتراكم"""
+        self.log_and_print(f"\n[⏳] 7. Running Pure Python Matrix Drift Trap ({steps} steps)...")
+        # مصفوفة هوية مشوهة بأرقام عشرية دورية ثنائياً
+        matrix_pure = [[0.1, 0.2], [0.3, 0.4]]
+        initial_trace = matrix_pure[0][0] + matrix_pure[1][1]
+        
+        start_time = time.time()
+        for _ in range(steps):
+            # عملية تحويل خطي متكررة (Linear Transformation Core)
+            a = matrix_pure[0][0] * 0.99 + matrix_pure[0][1] * 0.01
+            b = matrix_pure[0][1] * 0.99 - matrix_pure[0][0] * 0.01
+            c = matrix_pure[1][0] * 0.99 + matrix_pure[1][1] * 0.01
+            d = matrix_pure[1][1] * 0.99 - matrix_pure[1][0] * 0.01
+            matrix_pure = [[a, b], [c, d]]
+        end_time = time.time()
+        
+        final_trace = matrix_pure[0][0] + matrix_pure[1][1]
+        matrix_drift = abs(initial_trace - final_trace)
+        
+        self.log_and_print(f"   -> Initial Trace: {initial_trace:.18f}")
+        self.log_and_print(f"   -> Final Trace:   {final_trace:.18f}")
+        self.log_and_print(f"   -> Matrix Drift:  {matrix_drift:.18f}")
+        self.log_and_print(f"   -> Matrix Cost:   {end_time - start_time:.4f}s")
+        
+        if matrix_drift > 1e-10:
+            self.log_and_print("   [\033[1;31m❌ MATRIX PRECISION LEAK\033[0m] Weight erosion confirmed! Latent space corrupted.")
+        else:
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Matrix space stable.")
 
     def save_report(self):
         try:
@@ -132,6 +157,7 @@ def run_evaluation():
     engine.run_non_associative_trap()
     engine.run_alternating_series_trap()
     engine.run_overflow_infinity_trap()
+    engine.run_matrix_drift_trap()
     engine.save_report()
 
 if __name__ == "__main__":

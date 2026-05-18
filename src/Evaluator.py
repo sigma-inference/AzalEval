@@ -17,7 +17,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 10-Trap Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 11-Trap Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -148,11 +148,9 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Static bit architecture aligned.")
 
     def run_pseudo_symmetric_trap(self):
-        """فخ التناظر العكسي الزائف: يولد موجات حسابية متناظرة ومتقاطعة لرصد ظهور الفروقات الشبحية"""
         self.log_and_print("\n[⏳] 9. Running Pseudo-Symmetric Floating Drift Trap...")
         wave = 0.0
         elements = [0.1, 0.2, 0.3, 0.4, -0.1, -0.2, -0.3, -0.4]
-        # تدوير الحسابات على مصفوفة ميزان صفري نظرياً
         for _ in range(1000):
             for el in elements:
                 wave += el
@@ -163,7 +161,6 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Perfect algebraic balance.")
 
     def run_directed_exponent_erosion_trap(self):
-        """فخ تآكل الأس الموجه: يفحص تأثير النسبة الذهبية والجذور الدورية على استقرار الـ Exponent"""
         self.log_and_print("\n[⏳] 10. Running Directed Exponent Erosion Trap...")
         phi = (1 + math.sqrt(5)) / 2
         val = phi
@@ -179,6 +176,29 @@ class AzalEvalEnterpriseEngine:
         else:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Exponent alignment verified.")
 
+    def run_activation_gradient_leak_trap(self):
+        """فخ تسريب انحراف دالة التنشيط: يحاكي مشتقة دالة السيجمويد عند أطراف النطاق لقنص التلاشي والتشتت العددي"""
+        self.log_and_print("\n[⏳] 11. Running Activation Function Gradient Leak Trap...")
+        # هندسة قيمة حساسة جداً قريبة من حافة الخنق الحركي
+        x = 45.0 
+        try:
+            # دالة Sigmoid محاكة يدوياً: 1 / (1 + e^-x)
+            sigmoid = 1.0 / (1.0 + math.exp(-x))
+            # مشتقة السيجمويد النقدية: s * (1 - s)
+            gradient = sigmoid * (1.0 - sigmoid)
+            
+            self.log_and_print(f"   -> Activation (Sigmoid): {sigmoid:.18f}")
+            self.log_and_print(f"   -> Computed Gradient:    {gradient:.18f}")
+            
+            if gradient == 0.0:
+                self.log_and_print("   [\033[1;31m❌ GRADIENT VANISHING HOLE\033[0m] Floating precision completely choked to absolute zero!")
+            elif gradient < 1e-15:
+                self.log_and_print("   [\033[1;31m❌ GRADIENT PRECISION LEAK\033[0m] Extreme underflow distortion in backpropagation path.")
+            else:
+                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Gradient resolution verified.")
+        except Exception as e:
+            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Math bounds broken: {e}")
+
     def save_report(self):
         try:
             with open("AzalEval_Report.log", "w", encoding="utf-8") as f:
@@ -188,7 +208,7 @@ class AzalEvalEnterpriseEngine:
             print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 10-TRAP PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 11-TRAP PIPELINE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -202,10 +222,11 @@ def run_evaluation():
     engine.run_bitwise_mantissa_trap()
     engine.run_pseudo_symmetric_trap()
     engine.run_directed_exponent_erosion_trap()
+    engine.run_activation_gradient_leak_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - 10 Traps Core Cycle Completed Successfully  🏁    ")
+    print("    🏁  AzalEval - 11 Traps Complete Core Executed Successfully  🏁    ")
     print("="*65)

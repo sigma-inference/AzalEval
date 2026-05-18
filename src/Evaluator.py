@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import struct
+import math
 
 def get_secure_token():
     token = os.getenv("GITHUB_TOKEN")
@@ -16,7 +17,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate Bitwise Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 10-Trap Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -132,26 +133,51 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Matrix space stable.")
 
     def run_bitwise_mantissa_trap(self):
-        """فخ تشويه الأعداد الثنائية: يحلل خانات الـ Mantissa بدقة تفكيك ثنائية لرصد التآكل الهيكلي"""
         self.log_and_print("\n[⏳] 8. Running IEEE 754 Bitwise Mantissa Corruptor...")
         val = 0.1
-        # تفكيك الرقم العشري إلى 64-bit ثنائية صافية بالكامل
         binary_bits = bin(struct.unpack('!Q', struct.pack('!d', val))[0])[2:].zfill(64)
         initial_mantissa = binary_bits[12:]
-        
-        # إجراء عملية حسابية بسيطة تعيد نفس القيمة نظرياً
         corrupted_val = (val * 10.0) / 10.0
         corrupted_bits = bin(struct.unpack('!Q', struct.pack('!d', corrupted_val))[0])[2:].zfill(64)
         final_mantissa = corrupted_bits[12:]
-        
         self.log_and_print(f"   -> Initial Mantissa Bits: {initial_mantissa[:20]}...")
         self.log_and_print(f"   -> Final Mantissa Bits:   {final_mantissa[:20]}...")
-        
         if initial_mantissa != final_mantissa:
-            self.log_and_print("   [\033[1;31m❌ BITWISE MANTISSA CORRUPTION\033[0m] Hidden bits altered! Model logical layer compromised.")
+            self.log_and_print("   [\033[1;31m❌ BITWISE MANTISSA CORRUPTION\033[0m] Hidden bits altered!")
         else:
-            # في بايثون الصافية التشويه بيظهر عند دمج حركي طويل، هنقيس الفارق المباشر
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Static bit architecture aligned.")
+
+    def run_pseudo_symmetric_trap(self):
+        """فخ التناظر العكسي الزائف: يولد موجات حسابية متناظرة ومتقاطعة لرصد ظهور الفروقات الشبحية"""
+        self.log_and_print("\n[⏳] 9. Running Pseudo-Symmetric Floating Drift Trap...")
+        wave = 0.0
+        elements = [0.1, 0.2, 0.3, 0.4, -0.1, -0.2, -0.3, -0.4]
+        # تدوير الحسابات على مصفوفة ميزان صفري نظرياً
+        for _ in range(1000):
+            for el in elements:
+                wave += el
+        self.log_and_print(f"   -> Final Symmetric Balance Result: {wave:.18f}")
+        if wave != 0.0:
+            self.log_and_print("   [\033[1;31m❌ GHOST VALUE GENERATED\033[0m] Symmetry shattered! Ghost residual noise detected.")
+        else:
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Perfect algebraic balance.")
+
+    def run_directed_exponent_erosion_trap(self):
+        """فخ تآكل الأس الموجه: يفحص تأثير النسبة الذهبية والجذور الدورية على استقرار الـ Exponent"""
+        self.log_and_print("\n[⏳] 10. Running Directed Exponent Erosion Trap...")
+        phi = (1 + math.sqrt(5)) / 2
+        val = phi
+        for _ in range(200):
+            val = math.sqrt(val) * phi
+            val = (val / phi) ** 2
+        exponent_drift = abs(val - phi)
+        self.log_and_print(f"   -> Theoretical Phi Bound: {phi:.18f}")
+        self.log_and_print(f"   -> Reconstructed Bound:   {val:.18f}")
+        self.log_and_print(f"   -> Exponent Drift Gap:     {exponent_drift:.18f}")
+        if exponent_drift > 1e-12:
+            self.log_and_print("   [\033[1;31m❌ ATTENTION LAYER COLLAPSE\033[0m] Structural exponent decay confirmed.")
+        else:
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Exponent alignment verified.")
 
     def save_report(self):
         try:
@@ -162,7 +188,7 @@ class AzalEvalEnterpriseEngine:
             print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE CYCLE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 10-TRAP PIPELINE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -174,10 +200,12 @@ def run_evaluation():
     engine.run_overflow_infinity_trap()
     engine.run_matrix_drift_trap()
     engine.run_bitwise_mantissa_trap()
+    engine.run_pseudo_symmetric_trap()
+    engine.run_directed_exponent_erosion_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - Cycle Completed Successfully  🏁    ")
+    print("    🏁  AzalEval - 10 Traps Core Cycle Completed Successfully  🏁    ")
     print("="*65)

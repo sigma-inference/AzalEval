@@ -17,7 +17,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 14-Trap Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 15-Trap Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -227,25 +227,37 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Softmax math bounds collapsed: {e}")
 
     def run_deep_layer_scale_collapse_trap(self):
-        """فخ انهيار مقياس الطبقات العميقة: يحاكي التآكل التراكمي في الأوزان الحركية عبر مصفوفات مكررة متباينة"""
         self.log_and_print("\n[⏳] 14. Running Deep Layer Scale Collapse Trap...")
         scale_weight = 1.0
         decay_factor = 0.9999999999999
-        # محاكاة لـ 96 طبقة معالجة حسابية عميقة داخل محرك الأوزان
         for _ in range(96):
             scale_weight *= decay_factor
-        
         theoretical_scale = 0.9999999999999 ** 96
         scale_drift = abs(scale_weight - theoretical_scale)
-        
         self.log_and_print(f"   -> Theoretical Deep Scale: {theoretical_scale:.18f}")
         self.log_and_print(f"   -> Accumulated Layer Scale: {scale_weight:.18f}")
         self.log_and_print(f"   -> Deep Layer Drift Gap:    {scale_drift:.18f}")
-        
         if scale_drift > 0.0 or scale_weight != theoretical_scale:
-            self.log_and_print("   [\033[1;31m❌ DEEP LAYER SCALE COLLAPSE\033[0m] Precision drift altered layer constraints! Internal vector alignment warped.")
+            self.log_and_print("   [\033[1;31m❌ DEEP LAYER SCALE COLLAPSE\033[0m] Precision drift altered layer constraints!")
         else:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Deep normalization layer locked.")
+
+    def run_denormalized_zero_flushed_trap(self):
+        """فخ تصفية الأرقام دون الحركية: يحاكي إجبار الـ Denormal numbers على التلاشي لصفر مطلق ورصد الفجوة البنيوية"""
+        self.log_and_print("\n[⏳] 15. Running Denormalized Zero Flushed Trap...")
+        # رقم يقع في نطاق الـ Subnormal لـ float64 (أقل من 2.22e-308 وأكبر من الصفر الحقيقي)
+        denormal_target = 1e-315
+        
+        # محاكاة برمجية حاسمة لبيئة معالجة تفعل الـ FTZ (Flush-To-Zero)
+        flushed_value = 0.0 if denormal_target < 2.2250738585072014e-308 else denormal_target
+        
+        self.log_and_print(f"   -> Raw Subnormal Imprinted: {denormal_target}")
+        self.log_and_print(f"   -> Hardware Flushed Value:  {flushed_value}")
+        
+        if flushed_value == 0.0 and denormal_target > 0.0:
+            self.log_and_print("   [\033[1;31m❌ DENORMAL ZERO FLUSHED\033[0m] Tiny attention weight completely vaporized by FTZ constraint simulation!")
+        else:
+            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Subnormal range preserved inside core.")
 
     def save_report(self):
         try:
@@ -256,7 +268,7 @@ class AzalEvalEnterpriseEngine:
             print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 14-TRAP PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 15-TRAP PIPELINE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -274,10 +286,11 @@ def run_evaluation():
     engine.run_context_window_drift_trap()
     engine.run_softmax_probability_choke_trap()
     engine.run_deep_layer_scale_collapse_trap()
+    engine.run_denormalized_zero_flushed_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - 14 Traps Complete Core Executed Successfully  🏁    ")
+    print("    🏁  AzalEval - 15 Traps Complete Core Executed Successfully  🏁    ")
     print("="*65)

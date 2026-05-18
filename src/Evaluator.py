@@ -15,12 +15,11 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Continuous Integration  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Advanced Stress Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
         print(message)
-        # إزالة الألوان قبل الحفظ في الـ Log
         clean_msg = message.replace("\033[1;31m", "").replace("\033[0m", "").replace("\033[1;32m", "").replace("\033[1;34m", "").replace("\033[1;36m", "")
         self.report_lines.append(clean_msg)
 
@@ -79,7 +78,6 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Order independent.")
 
     def run_alternating_series_trap(self, steps=10000):
-        """فخ متسلسلة متذبذبة: يفحص ثبات حيز التقريب الرقمي عبر آلاف الخطوات العكسية"""
         self.log_and_print(f"\n[⏳] 5. Running Alternating Series Drift Trap ({steps} steps)...")
         result = 0.0
         start_time = time.time()
@@ -90,21 +88,41 @@ class AzalEvalEnterpriseEngine:
             else:
                 result += term
         end_time = time.time()
-        # تقريب القيمة النظرية للمقارنة الحادة
         self.log_and_print(f"   -> Alternating Series Result: {result:.18f}")
         self.log_and_print(f"   -> Alternating Time Cost:     {end_time - start_time:.4f}s")
         self.log_and_print("   [\033[1;32m✅ CORE MONITOR ACTIVE\033[0m] Dynamic rounding drift tracked.")
+
+    def run_overflow_infinity_trap(self):
+        """فخ الانفجار اللانهائي: يحدد حاجز الانهيار للأسس العالية ويراقب توليد الـ NaN"""
+        self.log_and_print("\n[⏳] 6. Running Overflow & NaN Exploit Trap...")
+        try:
+            # محاولة تخطي حاجز الـ Float Max
+            huge_base = 1e308
+            overflow_trigger = huge_base * 2.0
+            self.log_and_print(f"   -> Huge Base:       {huge_base}")
+            self.log_and_print(f"   -> Overflow Result: {overflow_trigger}")
+            
+            # هندسة قيمة ليس رقماً لتدمير الحسابات المتتالية
+            nan_trigger = overflow_trigger - overflow_trigger
+            self.log_and_print(f"   -> Isolated NaN Trigger: {nan_trigger}")
+            
+            if overflow_trigger == float('inf') or str(nan_trigger) == 'nan':
+                self.log_and_print("   [\033[1;31m❌ MEMORY OVERFLOW LOCK\033[0m] System generated Infinity/NaN. Model logic collapses here.")
+            else:
+                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Hardware bounds secured.")
+        except Exception as e:
+            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Hardware intercepted crash: {e}")
 
     def save_report(self):
         try:
             with open("AzalEval_Report.log", "w", encoding="utf-8") as f:
                 f.write("\n".join(self.report_lines))
-            print("\n\033[1;32m[💾 REPORT] Local secure log compiled successfully: AzalEval_Report.log\033[0m")
+            print("\n\033[1;32m[💾 REPORT] Secure log compiled: AzalEval_Report.log\033[0m")
         except Exception as e:
-            print(f"\n\033[1;31m[⚠️ ERROR] Failed to save local log: {e}\033[0m")
+            print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] DEPLOYING ENTERPRISE TRAPS CONTINUOUS PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE CYCLE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -113,10 +131,11 @@ def run_evaluation():
     engine.run_underflow_ghost_trap()
     engine.run_non_associative_trap()
     engine.run_alternating_series_trap()
+    engine.run_overflow_infinity_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - Continuous Integration Cycle Completed  🏁    ")
+    print("    🏁  AzalEval - Cycle Completed Successfully  🏁    ")
     print("="*65)

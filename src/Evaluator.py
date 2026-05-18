@@ -17,7 +17,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 12-Trap Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 13-Trap Core  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -194,24 +194,43 @@ class AzalEvalEnterpriseEngine:
             self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Math bounds broken: {e}")
 
     def run_context_window_drift_trap(self):
-        """فخ انحراف نافذة السياق: يحاكي تشتت فهارس مواقع الكلمات عبر تكرار تراكمي لخطوات التموضع الطويل"""
         self.log_and_print("\n[⏳] 12. Running Context Window Indexing Drift Trap...")
         step = 0.0001
         index_ptr = 0.0
-        # محاكاة لـ 128k نافذة سياق حركية عبر تجميع خطي دقيق
         for _ in range(131072):
             index_ptr += step
         expected_ptr = 0.0001 * 131072
         index_drift = abs(index_ptr - expected_ptr)
-        
         self.log_and_print(f"   -> Theoretical Index: {expected_ptr:.18f}")
         self.log_and_print(f"   -> Accumulated Pointer: {index_ptr:.18f}")
         self.log_and_print(f"   -> Context Drift Gap:   {index_drift:.18f}")
-        
         if index_drift > 1e-11:
             self.log_and_print("   [\033[1;31m❌ CONTEXT POSITION DRIFT\033[0m] Indexing tracking corrupted! Model long-term memory misaligned.")
         else:
             self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Context memory pointers fully locked.")
+
+    def run_softmax_probability_choke_trap(self):
+        """فخ خنق احتمالات السوفت ماكس: يحاكي استجابة التوزيع الاحتمالي عند حقن Logits حادة ومتباعدة جداً لرصد الانهيار"""
+        self.log_and_print("\n[⏳] 13. Running Softmax Probability Choke Trap...")
+        # حقن مدخلات حادة جداً تحاكي التباعد الحرج في اتخاذ القرار
+        logits = [1000.0, -1000.0, 0.0]
+        try:
+            # استخراج أقصى قيمة لمنع الـ Overflow المباشر، لكن سنترك الهندسة تختبر الـ Underflow الحاد
+            max_logit = max(logits)
+            exp_values = [math.exp(l - max_logit) for l in logits]
+            sum_exp = sum(exp_values)
+            probabilities = [e / sum_exp for e in exp_values]
+            
+            self.log_and_print(f"   -> Sharp Logits Imprinted:   {logits}")
+            self.log_and_print(f"   -> Probability Distribution: {probabilities}")
+            
+            # قنص التلاشي والـ Underflow التام للاحتمالات الفرعية
+            if probabilities[1] == 0.0:
+                self.log_and_print("   [\033[1;31m❌ SOFTMAX PROBABILITY UNDERFLOW\033[0m] Minority tokens completely choked to absolute zero probability!")
+            else:
+                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Softmax resolution dynamic range stable.")
+        except Exception as e:
+            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Softmax math bounds collapsed: {e}")
 
     def save_report(self):
         try:
@@ -222,7 +241,7 @@ class AzalEvalEnterpriseEngine:
             print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 12-TRAP PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 13-TRAP PIPELINE...\033[0m")
     get_secure_token()
     
     engine = AzalEvalEnterpriseEngine()
@@ -238,10 +257,11 @@ def run_evaluation():
     engine.run_directed_exponent_erosion_trap()
     engine.run_activation_gradient_leak_trap()
     engine.run_context_window_drift_trap()
+    engine.run_softmax_probability_choke_trap()
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
     print("\n" + "="*65)
-    print("    🏁  AzalEval - 12 Traps Complete Core Executed Successfully  🏁    ")
+    print("    🏁  AzalEval - 13 Traps Complete Core Executed Successfully  🏁    ")
     print("="*65)

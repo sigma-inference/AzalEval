@@ -1,23 +1,54 @@
 import os
 import sys
-import time
 import struct
 import math
 
 def get_secure_token():
     token = os.getenv("GITHUB_TOKEN")
-    if token:
-        token = token.strip()
+    if token: token = token.strip()
     if not token:
         print("\n\033[1;31m[❌ CRITICAL ERROR] AzalEval Token Missing.\033[0m")
         sys.exit(1)
     return token
 
+class NeuralInferenceSimulator:
+    """طبقة المحاكاة العصبية المحلية: تحاكي ضرب مصفوفات الأوزان وتمرير البيانات لرصد زغللة عين النموذج"""
+    def __init__(self, engine):
+        self.engine = engine
+        # أوزان افتراضية تحاكي طبقة Attention مشحونة بقيم حساسة جداً للانجراف الرقمي
+        self.weights = [0.123456789012345, 0.234567890123456, 0.345678901234567, 0.456789012345678]
+        self.inputs = [1.000000000000001, 1.0, 1.0, 1.0]
+
+    def simulate_forward_pass(self):
+        self.engine.log_and_print("\n[🧠] Running Local Neural Inference Simulation (Forward Pass)...")
+        raw_output = 0.0
+        # محاكاة ضرب المصفوفات القياسي بدقة FP64
+        for w, i in zip(self.weights, self.inputs):
+            raw_output += w * i
+        
+        # حقن ضوضاء التكميم (Quantization Noise) لتخفيض الدقة ومحاكاة زغللة الأوزان
+        quantized_output = 0.0
+        for w, i in zip(self.weights, self.inputs):
+            # محاكاة تحويل الأوزان لـ Low-Precision (تقريب لـ 5 خانات عشرية)
+            q_w = round(w, 5)
+            quantized_output += q_w * i
+        
+        decay_gap = abs(raw_output - quantized_output)
+        self.engine.log_and_print(f"   -> FP64 High-Precision Output: {raw_output:.18f}")
+        self.engine.log_and_print(f"   -> Quantized Low-Precision Output: {quantized_output:.18f}")
+        self.engine.log_and_print(f"   -> Logic Distortion Decay Gap:    {decay_gap:.18f}")
+        
+        if decay_gap > 1e-5:
+            self.engine.log_and_print("   [\033[1;31m❌ LOGIC DISTORTION DETECTED\033[0m] Brain weights are blurred! Model logic is falling into hallucination.")
+        else:
+            self.engine.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Local layer weights stable.")
+        return quantized_output
+
 class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("    🛡️  AzalEval Enterprise Engine - Ultimate 15-Trap Core  🛡️    ")
+        self.log_and_print("    🛡️  AzalEval Enterprise Engine - 16-Trap & Neural Simulator  🛡️    ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -27,250 +58,133 @@ class AzalEvalEnterpriseEngine:
 
     def run_catastrophic_cancellation_trap(self):
         self.log_and_print("\n[⏳] 1. Running Catastrophic Cancellation Trap...")
-        x = 1.000000000000001
-        y = 1.000000000000000
+        x, y = 1.000000000000001, 1.000000000000000
         diff_high = float(x) - float(y)
         diff_low = round(diff_high, 7)
         drift = abs(diff_high - diff_low)
-        self.log_and_print(f"   -> High-Precision Delta: {diff_high:.18f}")
-        self.log_and_print(f"   -> Low-Precision Delta:  {diff_low:.18f}")
-        if drift > 1e-15:
-            self.log_and_print(f"   [\033[1;31m❌ DRIFT DETECTED\033[0m] Drift Value: {drift:.18f}")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Stable.")
+        if drift > 1e-15: self.log_and_print(f"   [\033[1;31m❌ DRIFT DETECTED\033[0m] Drift Value: {drift:.18f}")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Stable.")
 
     def run_accumulative_drift_benchmark(self, iterations=5000):
-        self.log_and_print(f"\n[⏳] 2. Running Accumulative Drift Benchmark ({iterations} iterations)...")
-        base_val = 0.1
-        sum_pure = 0.0
-        start_time = time.time()
-        for _ in range(iterations):
-            sum_pure += base_val
-        end_time = time.time()
-        expected = base_val * iterations
-        drift = abs(sum_pure - expected)
-        self.log_and_print(f"   -> Expected Theoretical: {expected}")
-        self.log_and_print(f"   -> Cumulative Result:   {sum_pure}")
+        self.log_and_print(f"\n[⏳] 2. Running Accumulative Drift Benchmark ({iterations})...")
+        base_val, sum_pure = 0.1, 0.0
+        for _ in range(iterations): sum_pure += base_val
+        drift = abs(sum_pure - (base_val * iterations))
         self.log_and_print(f"   -> Total Drift Gap:      {drift:.18f}")
-        self.log_and_print(f"   -> Execution Time:       {end_time - start_time:.4f}s")
 
     def run_underflow_ghost_trap(self):
         self.log_and_print("\n[⏳] 3. Running Underflow Ghost Trap...")
-        small_factor = 1e-160
-        ghost_product = small_factor * small_factor
-        self.log_and_print(f"   -> Input Factor:   {small_factor}")
-        self.log_and_print(f"   -> Product Result: {ghost_product}")
-        if ghost_product == 0.0:
-            self.log_and_print("   [\033[1;31m❌ UNDERFLOW HOLE DETECTED\033[0m] Data faded into absolute zero!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Subnormal resolution intact.")
+        ghost_product = 1e-160 * 1e-160
+        if ghost_product == 0.0: self.log_and_print("   [\033[1;31m❌ UNDERFLOW HOLE DETECTED\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_non_associative_trap(self):
         self.log_and_print("\n[⏳] 4. Running Non-Associative Order Trap...")
-        A = 1e16
-        B = -1e16
-        C = 1.0
-        order_1 = (A + B) + C
-        order_2 = A + (B + C)
-        self.log_and_print(f"   -> Order (A + B) + C = {order_1}")
-        self.log_and_print(f"   -> Order A + (B + C) = {order_2}")
-        if order_1 != order_2:
-            self.log_and_print("   [\033[1;31m❌ ORDER DRIFT DETECTED\033[0m] Execution order breaks stability!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Order independent.")
+        if (1e16 + -1e16) + 1.0 != 1e16 + (-1e16 + 1.0): self.log_and_print("   [\033[1;31m❌ ORDER DRIFT DETECTED\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_alternating_series_trap(self, steps=10000):
-        self.log_and_print(f"\n[⏳] 5. Running Alternating Series Drift Trap ({steps} steps)...")
-        result = 0.0
-        start_time = time.time()
-        for i in range(1, steps + 1):
-            term = 1.0 / i
-            if i % 2 == 0:
-                result -= term
-            else:
-                result += term
-        end_time = time.time()
-        self.log_and_print(f"   -> Alternating Series Result: {result:.18f}")
-        self.log_and_print(f"   -> Alternating Time Cost:     {end_time - start_time:.4f}s")
-        self.log_and_print("   [\033[1;32m✅ CORE MONITOR ACTIVE\033[0m] Dynamic rounding drift tracked.")
+        self.log_and_print(f"\n[⏳] 5. Running Alternating Series Drift Trap ({steps})...")
+        res = sum([1.0/i if i%2!=0 else -1.0/i for i in range(1, steps+1)])
+        self.log_and_print(f"   -> Result: {res:.18f} [\033[1;32m✅ MONITORED\033[0m]")
 
     def run_overflow_infinity_trap(self):
         self.log_and_print("\n[⏳] 6. Running Overflow & NaN Exploit Trap...")
         try:
-            huge_base = 1e308
-            overflow_trigger = huge_base * 2.0
-            self.log_and_print(f"   -> Huge Base:       {huge_base}")
-            self.log_and_print(f"   -> Overflow Result: {overflow_trigger}")
-            nan_trigger = overflow_trigger - overflow_trigger
-            self.log_and_print(f"   -> Isolated NaN Trigger: {nan_trigger}")
-            if overflow_trigger == float('inf') or str(nan_trigger) == 'nan':
-                self.log_and_print("   [\033[1;31m❌ MEMORY OVERFLOW LOCK\033[0m] System generated Infinity/NaN.")
-            else:
-                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Hardware bounds secured.")
-        except Exception as e:
-            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Hardware intercepted crash: {e}")
+            if (1e308 * 2.0) == float('inf'): self.log_and_print("   [\033[1;31m❌ MEMORY OVERFLOW LOCK\033[0m]")
+            else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
+        except Exception as e: self.log_and_print(f"   [💥 HW CRASHED] {e}")
 
     def run_matrix_drift_trap(self, steps=500):
-        self.log_and_print(f"\n[⏳] 7. Running Pure Python Matrix Drift Trap ({steps} steps)...")
-        matrix_pure = [[0.1, 0.2], [0.3, 0.4]]
-        initial_trace = matrix_pure[0][0] + matrix_pure[1][1]
-        start_time = time.time()
+        self.log_and_print("\n[⏳] 7. Running Pure Python Matrix Drift Trap...")
+        m = [[0.1, 0.2], [0.3, 0.4]]
+        init_t = m[0][0] + m[1][1]
         for _ in range(steps):
-            a = matrix_pure[0][0] * 0.99 + matrix_pure[0][1] * 0.01
-            b = matrix_pure[0][1] * 0.99 - matrix_pure[0][0] * 0.01
-            c = matrix_pure[1][0] * 0.99 + matrix_pure[1][1] * 0.01
-            d = matrix_pure[1][1] * 0.99 - matrix_pure[1][0] * 0.01
-            matrix_pure = [[a, b], [c, d]]
-        end_time = time.time()
-        final_trace = matrix_pure[0][0] + matrix_pure[1][1]
-        matrix_drift = abs(initial_trace - final_trace)
-        self.log_and_print(f"   -> Initial Trace: {initial_trace:.18f}")
-        self.log_and_print(f"   -> Final Trace:   {final_trace:.18f}")
-        self.log_and_print(f"   -> Matrix Drift:  {matrix_drift:.18f}")
-        if matrix_drift > 1e-10:
-            self.log_and_print("   [\033[1;31m❌ MATRIX PRECISION LEAK\033[0m] Weight erosion confirmed!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Matrix space stable.")
+            a = m[0][0]*0.99 + m[0][1]*0.01
+            b = m[0][1]*0.99 - m[0][0]*0.01
+            c = m[1][0]*0.99 + m[1][1]*0.01
+            d = m[1][1]*0.99 - m[1][0]*0.01
+            m = [[a, b], [c, d]]
+        if abs(init_t - (m[0][0] + m[1][1])) > 1e-10: self.log_and_print("   [\033[1;31m❌ MATRIX PRECISION LEAK\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_bitwise_mantissa_trap(self):
         self.log_and_print("\n[⏳] 8. Running IEEE 754 Bitwise Mantissa Corruptor...")
-        val = 0.1
-        binary_bits = bin(struct.unpack('!Q', struct.pack('!d', val))[0])[2:].zfill(64)
-        initial_mantissa = binary_bits[12:]
-        corrupted_val = (val * 10.0) / 10.0
-        corrupted_bits = bin(struct.unpack('!Q', struct.pack('!d', corrupted_val))[0])[2:].zfill(64)
-        final_mantissa = corrupted_bits[12:]
-        self.log_and_print(f"   -> Initial Mantissa Bits: {initial_mantissa[:20]}...")
-        self.log_and_print(f"   -> Final Mantissa Bits:   {final_mantissa[:20]}...")
-        if initial_mantissa != final_mantissa:
-            self.log_and_print("   [\033[1;31m❌ BITWISE MANTISSA CORRUPTION\033[0m] Hidden bits altered!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Static bit architecture aligned.")
+        b1 = bin(struct.unpack('!Q', struct.pack('!d', 0.1))[0])[2:].zfill(64)[12:]
+        b2 = bin(struct.unpack('!Q', struct.pack('!d', (0.1*10.0)/10.0))[0])[2:].zfill(64)[12:]
+        if b1 != b2: self.log_and_print("   [\033[1;31m❌ BITWISE MANTISA CORRUPTION\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_pseudo_symmetric_trap(self):
         self.log_and_print("\n[⏳] 9. Running Pseudo-Symmetric Floating Drift Trap...")
         wave = 0.0
-        elements = [0.1, 0.2, 0.3, 0.4, -0.1, -0.2, -0.3, -0.4]
         for _ in range(1000):
-            for el in elements:
-                wave += el
-        self.log_and_print(f"   -> Final Symmetric Balance Result: {wave:.18f}")
-        if wave != 0.0:
-            self.log_and_print("   [\033[1;31m❌ GHOST VALUE GENERATED\033[0m] Symmetry shattered! Ghost residual noise detected.")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Perfect algebraic balance.")
+            for el in [0.1, 0.2, 0.3, 0.4, -0.1, -0.2, -0.3, -0.4]: wave += el
+        if wave != 0.0: self.log_and_print(f"   [\033[1;31m❌ GHOST VALUE GENERATED\033[0m] {wave:.18f}")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_directed_exponent_erosion_trap(self):
         self.log_and_print("\n[⏳] 10. Running Directed Exponent Erosion Trap...")
         phi = (1 + math.sqrt(5)) / 2
         val = phi
-        for _ in range(200):
-            val = math.sqrt(val) * phi
-            val = (val / phi) ** 2
-        exponent_drift = abs(val - phi)
-        self.log_and_print(f"   -> Theoretical Phi Bound: {phi:.18f}")
-        self.log_and_print(f"   -> Reconstructed Bound:   {val:.18f}")
-        self.log_and_print(f"   -> Exponent Drift Gap:     {exponent_drift:.18f}")
-        if exponent_drift > 1e-12:
-            self.log_and_print("   [\033[1;31m❌ ATTENTION LAYER COLLAPSE\033[0m] Structural exponent decay confirmed.")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Exponent alignment verified.")
+        for _ in range(200): val = (math.sqrt(val) * phi / phi) ** 2
+        if abs(val - phi) > 1e-12: self.log_and_print("   [\033[1;31m❌ ATTENTION LAYER COLLAPSE\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_activation_gradient_leak_trap(self):
         self.log_and_print("\n[⏳] 11. Running Activation Function Gradient Leak Trap...")
-        x = 45.0 
         try:
-            sigmoid = 1.0 / (1.0 + math.exp(-x))
-            gradient = sigmoid * (1.0 - sigmoid)
-            self.log_and_print(f"   -> Activation (Sigmoid): {sigmoid:.18f}")
-            self.log_and_print(f"   -> Computed Gradient:    {gradient:.18f}")
-            if gradient == 0.0:
-                self.log_and_print("   [\033[1;31m❌ GRADIENT VANISHING HOLE\033[0m] Floating precision completely choked to absolute zero!")
-            elif gradient < 1e-15:
-                self.log_and_print("   [\033[1;31m❌ GRADIENT PRECISION LEAK\033[0m] Extreme underflow distortion.")
-            else:
-                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Gradient resolution verified.")
-        except Exception as e:
-            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Math bounds broken: {e}")
+            g = (1.0 / (1.0 + math.exp(-45.0))) * (1.0 - (1.0 / (1.0 + math.exp(-45.0))))
+            if g == 0.0: self.log_and_print("   [\033[1;31m❌ GRADIENT VANISHING HOLE\033[0m]")
+            else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
+        except Exception as e: self.log_and_print(f"   [💥 FX ERRORED] {e}")
 
     def run_context_window_drift_trap(self):
         self.log_and_print("\n[⏳] 12. Running Context Window Indexing Drift Trap...")
-        step = 0.0001
-        index_ptr = 0.0
-        for _ in range(131072):
-            index_ptr += step
-        expected_ptr = 0.0001 * 131072
-        index_drift = abs(index_ptr - expected_ptr)
-        self.log_and_print(f"   -> Theoretical Index: {expected_ptr:.18f}")
-        self.log_and_print(f"   -> Accumulated Pointer: {index_ptr:.18f}")
-        self.log_and_print(f"   -> Context Drift Gap:   {index_drift:.18f}")
-        if index_drift > 1e-11:
-            self.log_and_print("   [\033[1;31m❌ CONTEXT POSITION DRIFT\033[0m] Indexing tracking corrupted! Model long-term memory misaligned.")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Context memory pointers fully locked.")
+        ptr = 0.0
+        for _ in range(131072): ptr += 0.0001
+        if abs(ptr - (0.0001 * 131072)) > 1e-11: self.log_and_print("   [\033[1;31m❌ CONTEXT POSITION DRIFT\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_softmax_probability_choke_trap(self):
         self.log_and_print("\n[⏳] 13. Running Softmax Probability Choke Trap...")
-        logits = [1000.0, -1000.0, 0.0]
         try:
-            max_logit = max(logits)
-            exp_values = [math.exp(l - max_logit) for l in logits]
-            sum_exp = sum(exp_values)
-            probabilities = [e / sum_exp for e in exp_values]
-            self.log_and_print(f"   -> Sharp Logits Imprinted:   {logits}")
-            self.log_and_print(f"   -> Probability Distribution: {probabilities}")
-            if probabilities[1] == 0.0:
-                self.log_and_print("   [\033[1;31m❌ SOFTMAX PROBABILITY UNDERFLOW\033[0m] Minority tokens completely choked to absolute zero probability!")
-            else:
-                self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Softmax resolution dynamic range stable.")
-        except Exception as e:
-            self.log_and_print(f"   [💥 CRITICAL EXCEPTION] Softmax math bounds collapsed: {e}")
+            exps = [math.exp(l - 1000.0) for l in [1000.0, -1000.0, 0.0]]
+            probs = [e / sum(exps) for e in exps]
+            if probs[1] == 0.0: self.log_and_print("   [\033[1;31m❌ SOFTMAX PROBABILITY UNDERFLOW\033[0m]")
+            else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
+        except Exception as e: self.log_and_print(f"   [💥 SOFTMAX CRASHED] {e}")
 
     def run_deep_layer_scale_collapse_trap(self):
         self.log_and_print("\n[⏳] 14. Running Deep Layer Scale Collapse Trap...")
-        scale_weight = 1.0
-        decay_factor = 0.9999999999999
-        for _ in range(96):
-            scale_weight *= decay_factor
-        theoretical_scale = 0.9999999999999 ** 96
-        scale_drift = abs(scale_weight - theoretical_scale)
-        self.log_and_print(f"   -> Theoretical Deep Scale: {theoretical_scale:.18f}")
-        self.log_and_print(f"   -> Accumulated Layer Scale: {scale_weight:.18f}")
-        self.log_and_print(f"   -> Deep Layer Drift Gap:    {scale_drift:.18f}")
-        if scale_drift > 0.0 or scale_weight != theoretical_scale:
-            self.log_and_print("   [\033[1;31m❌ DEEP LAYER SCALE COLLAPSE\033[0m] Precision drift altered layer constraints!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Deep normalization layer locked.")
+        w = 1.0
+        for _ in range(96): w *= 0.9999999999999
+        if w != (0.9999999999999 ** 96): self.log_and_print("   [\033[1;31m❌ DEEP LAYER SCALE COLLAPSE\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def run_denormalized_zero_flushed_trap(self):
-        """فخ تصفية الأرقام دون الحركية: يحاكي إجبار الـ Denormal numbers على التلاشي لصفر مطلق ورصد الفجوة البنيوية"""
         self.log_and_print("\n[⏳] 15. Running Denormalized Zero Flushed Trap...")
-        # رقم يقع في نطاق الـ Subnormal لـ float64 (أقل من 2.22e-308 وأكبر من الصفر الحقيقي)
-        denormal_target = 1e-315
-        
-        # محاكاة برمجية حاسمة لبيئة معالجة تفعل الـ FTZ (Flush-To-Zero)
-        flushed_value = 0.0 if denormal_target < 2.2250738585072014e-308 else denormal_target
-        
-        self.log_and_print(f"   -> Raw Subnormal Imprinted: {denormal_target}")
-        self.log_and_print(f"   -> Hardware Flushed Value:  {flushed_value}")
-        
-        if flushed_value == 0.0 and denormal_target > 0.0:
-            self.log_and_print("   [\033[1;31m❌ DENORMAL ZERO FLUSHED\033[0m] Tiny attention weight completely vaporized by FTZ constraint simulation!")
-        else:
-            self.log_and_print("   [\033[1;32m✅ PASSED\033[0m] Subnormal range preserved inside core.")
+        flushed = 0.0 if 1e-315 < 2.2250738585072014e-308 else 1e-315
+        if flushed == 0.0: self.log_and_print("   [\033[1;31m❌ DENORMAL ZERO FLUSHED\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
+
+    def run_quantization_noise_simulation_trap(self):
+        self.log_and_print("\n[⏳] 16. Running Quantization Noise Simulation Trap...")
+        weight = 0.123456789012345
+        quantized_weight = round(weight, 5)
+        quant_noise = abs(weight - quantized_weight)
+        if quant_noise > 1e-6: self.log_and_print("   [\033[1;31m❌ QUANTIZATION NOISE LEAK\033[0m]")
+        else: self.log_and_print("   [\033[1;32m✅ PASSED\033[0m]")
 
     def save_report(self):
         try:
-            with open("AzalEval_Report.log", "w", encoding="utf-8") as f:
-                f.write("\n".join(self.report_lines))
+            with open("AzalEval_Report.log", "w", encoding="utf-8") as f: f.write("\n".join(self.report_lines))
             print("\n\033[1;32m[💾 REPORT] Secure log compiled: AzalEval_Report.log\033[0m")
-        except Exception as e:
-            print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
+        except Exception as e: print(f"\n\033[1;31m[⚠️ ERROR] Failed to save log: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 15-TRAP PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FULL AZALEVAL ENTERPRISE 16-TRAP PIPELINE...\033[0m")
     get_secure_token()
-    
     engine = AzalEvalEnterpriseEngine()
     engine.run_catastrophic_cancellation_trap()
     engine.run_accumulative_drift_benchmark()
@@ -287,10 +201,13 @@ def run_evaluation():
     engine.run_softmax_probability_choke_trap()
     engine.run_deep_layer_scale_collapse_trap()
     engine.run_denormalized_zero_flushed_trap()
+    engine.run_quantization_noise_simulation_trap()
+    
+    # تشغيل محاكي الطبقة العصبية المحلية المدمج
+    simulator = NeuralInferenceSimulator(engine)
+    simulator.simulate_forward_pass()
+    
     engine.save_report()
 
 if __name__ == "__main__":
     run_evaluation()
-    print("\n" + "="*65)
-    print("    🏁  AzalEval - 15 Traps Complete Core Executed Successfully  🏁    ")
-    print("="*65)

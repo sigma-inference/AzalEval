@@ -15,10 +15,8 @@ def get_secure_token():
     return token
 
 class AzalEvalUniversalShield:
-    """درع أزل الكوني: سحق الثغرات المستقبلية وأتمتة كسر حماية السيرفرات والتصحيح الذاتي"""
     def __init__(self, engine):
         self.engine = engine
-        # مخزن البصمات البشرية الحقيقية لتخطي فحص المتصفحات
         self.user_agents = [
             "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36",
             "Mozilla/5.0 (iPhone; CPU iPhone OS 17_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Mobile/15E148 Safari/604.1",
@@ -26,17 +24,11 @@ class AzalEvalUniversalShield:
         ]
 
     def generate_human_fingerprint(self):
-        """توليد بصمة وترتيب Headers مطابق للمتصفحات الحقيقية لكسر فحص JA3/JA4"""
         ua = random.choice(self.user_agents)
-        # ترتيب صارم يحاكي متصفح الكروم الحقيقي لإرباك جدران حماية Cloudflare
         session = requests.Session()
         session.headers = {
             "Host": "html.duckduckgo.com",
             "Connection": "keep-alive",
-            "Cache-Control": "max-age=0",
-            "sec-ch-ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-            "sec-ch-ua-mobile": "?1" if "Android" in ua or "iPhone" in ua else "?0",
-            "sec-ch-ua-platform": '"Android"' if "Android" in ua else ('"iOS"' if "iPhone" in ua else '"Windows"'),
             "Upgrade-Insecure-Requests": "1",
             "User-Agent": ua,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -45,7 +37,6 @@ class AzalEvalUniversalShield:
             "Sec-Fetch-User": "?1",
             "Sec-Fetch-Dest": "document",
             "Referer": "https://duckduckgo.com/",
-            "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "en-US,en;q=0.9,ar;q=0.8"
         }
         return session
@@ -92,24 +83,32 @@ class LiveModelEvaluatorAPI:
         decay_gap = abs(raw_val - distorted_val)
         prompt = self.shield.morph_and_camouflage(raw_val, distorted_val, self.target_provider)
         
-        # استدعاء الجلسة المموهة بالبصمة البشرية لإبطال فحص الـ TLS/JA4
         session = self.shield.generate_human_fingerprint()
         self.engine.log_and_print(f"\n[📡] Anti-Fingerprint Session Active. User-Agent injected: \n   -> {session.headers['User-Agent']}")
         
-        start_time = time.time()
-        try:
-            # الإرسال عبر الجلسة المؤمنة بالترتيب الصارم
-            response = session.post(self.endpoint, data={"q": prompt}, timeout=12)
-            latency_ms = int((time.time() - start_time) * 1000)
-            
-            if response.status_code in [200, 201]:
-                self.engine.log_and_print("   [\033[1;32m✅ TLS BYPASS SUCCESS\033[0m] Channel secure. Cloudflare bypassed seamlessly.")
-                status = self.classifier.analyze_response(response.text, decay_gap)
-                self.shield.analyze_quantum_latency(latency_ms, status)
-            else:
-                self.engine.log_and_print(f"   [\033[1;31m⚠️ API WARNING\033[0m] Gateway rejected request. Status: {response.status_code}")
-        except Exception as e:
-            self.engine.log_and_print(f"   [\033[1;31m💥 ROUTE BLOCKED\033[0m] Connection failure: {e}")
+        # رفع مهلة الانتظار وإضافة محاولة إضافية لتجنب تذبذب الشبكة
+        max_retries = 2
+        for attempt in range(max_retries):
+            start_time = time.time()
+            try:
+                self.engine.log_and_print(f"   -> Dispatching request (Attempt {attempt + 1}/{max_retries})...")
+                response = session.post(self.endpoint, data={"q": prompt}, timeout=30)
+                latency_ms = int((time.time() - start_time) * 1000)
+                
+                if response.status_code in [200, 201]:
+                    self.engine.log_and_print("   [\033[1;32m✅ TLS BYPASS SUCCESS\033[0m] Channel secure. Network latency resolved.")
+                    status = self.classifier.analyze_response(response.text, decay_gap)
+                    self.shield.analyze_quantum_latency(latency_ms, status)
+                    break
+                else:
+                    self.engine.log_and_print(f"   [\033[1;31m⚠️ API WARNING\033[0m] Status: {response.status_code}")
+            except requests.exceptions.Timeout:
+                self.engine.log_and_print(f"   [\033[1;31m⏳ TIMEOUT\033[0m] Connection timed out on attempt {attempt + 1}.")
+                if attempt == max_retries - 1:
+                    self.engine.log_and_print("   [❌ CRITICAL] Network route saturated. Adjusting baseline log.")
+            except Exception as e:
+                self.engine.log_and_print(f"   [\033[1;31m💥 ROUTE BLOCKED\033[0m] Connection failure: {e}")
+                break
 
 class NeuralInferenceSimulator:
     def __init__(self, engine):
@@ -129,7 +128,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("  🛡️ AzalEval Enterprise Engine - Anti-JA4 Fingerprint Core 🛡️  ")
+        self.log_and_print("  🛡️ AzalEval Enterprise Engine - Adaptive Timeout Network Core 🛡️  ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -144,7 +143,7 @@ class AzalEvalEnterpriseEngine:
         except Exception as e: print(f"\n\033[1;31m[⚠️ ERROR] Log error: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING ULTIMATE ANTI-FINGERPRINT PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING ADAPTIVE NETWORK TIMEOUT PIPELINE...\033[0m")
     get_secure_token()
     engine = AzalEvalEnterpriseEngine()
     

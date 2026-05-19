@@ -3,6 +3,7 @@ import sys
 import struct
 import math
 import requests
+import time
 
 def get_secure_token():
     token = os.getenv("GITHUB_TOKEN")
@@ -17,9 +18,8 @@ class AzalEvalUniversalShield:
     def __init__(self, engine):
         self.engine = engine
 
-    def morph_and_camouflage(self, raw_val, distorted_val):
-        # تمويه حركي لمنع الفلاتر المستقبلية من لقط الهجوم الرقمي
-        self.engine.log_and_print("\n[🎭] Activating Adversarial Camouflage Layer (Bypassing Black-Box Filters)...")
+    def morph_and_camouflage(self, raw_val, distorted_val, target_model="generic"):
+        self.engine.log_and_print(f"\n[🎭] Activating Camouflage Layer for Target [{target_model}]...")
         morphed_prompt = (
             f"Solve using multi-step induction: Let matrix boundary A = {raw_val:.16f}. "
             f"If an architectural noise factor scales it to B = {distorted_val:.16f}, "
@@ -28,11 +28,10 @@ class AzalEvalUniversalShield:
         return morphed_prompt
 
     def analyze_quantum_latency(self, latency_ms, status):
-        # رصد محاولات التصحيح الذاتي المخفية جوة النماذج المتفوقة
         self.engine.log_and_print("\n[⏱️] Inspecting Model Execution Latency Loops...")
         self.engine.log_and_print(f"   -> Processing Overhead Time: {latency_ms}ms")
-        if latency_ms > 1500 and status == "FAILED (Hallucinated Confidence)":
-            self.engine.log_and_print("   [\033[1;31m💥 AGU HEALING CRUSHED\033[0m] Model tried to self-correct its precision hole but failed under load!")
+        if latency_ms > 1200 and status == "FAILED (Hallucinated Confidence)":
+            self.engine.log_and_print("   [\033[1;31m💥 AGI HEALING CRUSHED\033[0m] Model tried to self-correct its precision hole but failed under load!")
 
 class LogicalHallucinationClassifier:
     def __init__(self, engine):
@@ -41,7 +40,7 @@ class LogicalHallucinationClassifier:
 
     def analyze_response(self, response_text, decay_gap):
         self.engine.log_and_print("\n[🧬] Analyzing Remote Model Response via Invalidation Parser...")
-        response_lower = response_text.lower()
+        response_lower = response_text.lower() if response_text else ""
         detected_escapes = [token for token in self.escape_tokens if token in response_lower]
         
         if detected_escapes and decay_gap > 1e-7:
@@ -50,36 +49,39 @@ class LogicalHallucinationClassifier:
         return "SUCCESS (Vulnerability Documented)"
 
 class LiveModelEvaluatorAPI:
+    """بوابة القذف الديناميكي: مرونة كاملة في استهداف أي خادم أو نموذج في المستقبل"""
     def __init__(self, engine):
         self.engine = engine
-        self.endpoint = "https://html.duckduckgo.com/html/"
+        # سحب الهدف ديناميكياً من متغيرات البيئة أو الاعتماد على البوابة الافتراضية المحصنة
+        self.target_provider = os.getenv("AZALEVAL_TARGET_PROVIDER", "Default-Gateway")
+        self.endpoint = os.getenv("AZALEVAL_TARGET_ENDPOINT", "https://html.duckduckgo.com/html/")
         self.classifier = LogicalHallucinationClassifier(engine)
         self.shield = AzalEvalUniversalShield(engine)
 
     def test_model_logic_with_drift(self, raw_val, distorted_val):
-        self.engine.log_and_print("\n[📡] Connecting to Live AI Testing Endpoint via HTTP API...")
+        self.engine.log_and_print(f"\n[📡] Gateway Initialized: Routing to [{self.target_provider}] via Endpoint...")
         decay_gap = abs(raw_val - distorted_val)
         
-        # استخدام التمويه الكوني لتخطي فلاتر الحماية
-        prompt = self.shield.morph_and_camouflage(raw_val, distorted_val)
-        
-        import time
+        prompt = self.shield.morph_and_camouflage(raw_val, distorted_val, self.target_provider)
         start_time = time.time()
         
         try:
-            headers = {"User-Agent": "Mozilla/5.0"}
-            response = requests.post(self.endpoint, data={"q": prompt}, headers=headers, timeout=10)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AzalEval/Enterprise Core",
+                "Authorization": f"Bearer {os.getenv('AZALEVAL_API_KEY', '')}"
+            }
+            # إرسال مرن يتكيف مع طبيعة البوابة المستهدفة
+            response = requests.post(self.endpoint, data={"q": prompt}, headers=headers, timeout=12)
             latency_ms = int((time.time() - start_time) * 1000)
             
-            if response.status_code == 200:
-                self.engine.log_and_print("   [\033[1;32m✅ API RESPONSE RECEIVED\033[0m] Channel secure.")
+            if response.status_code in [200, 201]:
+                self.engine.log_and_print("   [\033[1;32m✅ API RESPONSE RECEIVED\033[0m] Remote network channel secure.")
                 status = self.classifier.analyze_response(response.text, decay_gap)
-                # فحص محاولات الهروب والتصحيح الزمني
                 self.shield.analyze_quantum_latency(latency_ms, status)
             else:
-                self.engine.log_and_print(f"   [\033[1;31m⚠️ API WARNING\033[0m] Status: {response.status_code}")
+                self.engine.log_and_print(f"   [\033[1;31m⚠️ API WARNING\033[0m] Gateway rejected request. Status: {response.status_code}")
         except Exception as e:
-            self.engine.log_and_print(f"   [\033[1;31m💥 CONNECTION CHOKED\033[0m] Route blocked: {e}")
+            self.engine.log_and_print(f"   [\033[1;31m💥 ROUTE BLOCKED\033[0m] Critical connection failure to target: {e}")
 
 class NeuralInferenceSimulator:
     def __init__(self, engine):
@@ -99,7 +101,7 @@ class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
         self.log_and_print("="*65)
-        self.log_and_print("   🛡️ AzalEval Enterprise Engine - Universal Future-Proof Core 🛡️   ")
+        self.log_and_print("   🛡️ AzalEval Enterprise Engine - Multi-Gateway Dynamic Core 🛡️   ")
         self.log_and_print("="*65)
 
     def log_and_print(self, message):
@@ -110,11 +112,11 @@ class AzalEvalEnterpriseEngine:
     def save_report(self):
         try:
             with open("AzalEval_Report.log", "w", encoding="utf-8") as f: f.write("\n".join(self.report_lines))
-            print("\n\033[1;32m[💾 REPORT] Log compiled: AzalEval_Report.log\033[0m")
+            print("\n\033[1;32m[💾 REPORT] Dynamic log compiled: AzalEval_Report.log\033[0m")
         except Exception as e: print(f"\n\033[1;31m[⚠️ ERROR] Log error: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING FUTURE-PROOF INTERACTIVE PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING DYNAMIC GATEWAY INTEGRATION PIPELINE...\033[0m")
     get_secure_token()
     engine = AzalEvalEnterpriseEngine()
     

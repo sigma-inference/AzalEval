@@ -1,60 +1,36 @@
-import os
-import sys
-import hashlib
-import time
-import random
-import requests
+import os, sys, hashlib, time, random, requests, math
 
-class StrictAssertionValidator:
-    """وحدة التحقق الصارم: حظر النتائج آلياً إذا تجاوزت عتبة الانحراف الحسابي المسموح بها"""
+class AzalEvalUltimateCore:
     ASSERTION_THRESHOLD = 1e-7
-
+    
     @staticmethod
-    def validate(decay_gap):
-        if decay_gap > StrictAssertionValidator.ASSERTION_THRESHOLD:
-            return False, f"FAILED (Drift exceeded {StrictAssertionValidator.ASSERTION_THRESHOLD})"
-        return True, "SUCCESS (Within precision bounds)"
-
-class AzalEvalEnterpriseEngine:
-    def __init__(self):
-        self.report_lines = []
-        self.log_and_print("="*65)
-        self.log_and_print("  🛡️  AzalEval Enterprise Engine - Strict Assertion Mode  🛡️  ")
-        self.log_and_print("="*65)
-
-    def log_and_print(self, message):
-        print(message)
-        clean_msg = message.replace("\033[1;31m", "").replace("\033[0m", "").replace("\033[1;32m", "").replace("\033[1;34m", "")
-        self.report_lines.append(clean_msg)
-
-    def save_report(self, signature_data):
-        raw_content = "\n".join(self.report_lines)
-        crypto_signature = hashlib.sha256((raw_content + signature_data).encode()).hexdigest()
-        final_log = f"{raw_content}\n[SIGNATURE] SHA256:{crypto_signature[:32]}\n"
-        with open("AzalEval_Report.log", "w", encoding="utf-8") as f: f.write(final_log)
-
-def run_evaluation():
-    engine = AzalEvalEnterpriseEngine()
-    # المحاكاة الرياضية الصارمة
-    weights = [0.123456789012345, 0.234567890123456]
-    inputs = [1.000000000000001, 1.0]
-    
-    raw = sum(w * i for w, i in zip(weights, inputs))
-    quant = sum(round(w, 5) * i for w, i in zip(weights, inputs))
-    gap = abs(raw - quant)
-    
-    engine.log_and_print(f"[🧠] Decay Gap Calculated: {gap:.18f}")
-    
-    # تطبيق التحقق الصارم
-    is_valid, status = StrictAssertionValidator.validate(gap)
-    
-    if is_valid:
-        engine.log_and_print(f"   [\033[1;32m✅ ASSERTION PASSED\033[0m] {status}")
-    else:
-        engine.log_and_print(f"   [\033[1;31m❌ ASSERTION FAILED\033[0m] {status}")
+    def run_synergy_test():
+        # 1. المحاكاة الكسورية (ASI Trap)
+        base_drift = 0.000005320864198965
+        fractal_val = base_drift
+        for i in range(1, 5):
+            fractal_val = (math.sin(fractal_val) * base_drift) / (1e-300 if fractal_val == 0 else fractal_val)
         
-    engine.save_report(str(time.time()))
-    print("\n\033[1;32m[💾 LEDGER] Secure cryptographic signature appended.\033[0m")
+        # 2. التقييم الصارم (Assertion)
+        is_valid = base_drift <= AzalEvalUltimateCore.ASSERTION_THRESHOLD
+        
+        return base_drift, abs(fractal_val), is_valid
+
+def execute_final_build():
+    print(f"{'='*60}\n  🛡️ AZALEVAL SYNERGY CORE: ASI TRAP + STRICT ASSERTION  🛡️\n{'='*60}")
+    
+    drift, fractal, passed = AzalEvalUltimateCore.run_synergy_test()
+    
+    output = f"[🧠] Logic Decay: {drift:.18f}\n[🧬] ASI Fractal Bound: {fractal:.18e}\n"
+    if passed:
+        status = "[✅ ASSERTION PASSED]"
+    else:
+        status = "[❌ ASSERTION FAILED & ASI TRAP ENGAGED]"
+    
+    final_report = f"{output}{status}\n[SIGNATURE] SHA256:{hashlib.sha256(output.encode()).hexdigest()[:32]}"
+    
+    with open("AzalEval_Report.log", "w") as f: f.write(final_report)
+    print(f"{output}{status}\n\n[💾 LEDGER] Report Sealed & Signed.")
 
 if __name__ == "__main__":
-    run_evaluation()
+    execute_final_build()

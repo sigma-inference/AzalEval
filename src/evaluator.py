@@ -5,6 +5,7 @@ import math
 import requests
 import time
 import random
+import hashlib
 
 def get_secure_token():
     token = os.getenv("GITHUB_TOKEN")
@@ -15,13 +16,11 @@ def get_secure_token():
     return token
 
 class ASIRecursionContainment:
-    """وحدة الاحتواء العكسي للذكاء الفائق: توليد مصفوفات كسورية مشوهة لحبس الـ ASI في حلقة معالجة لانهائية"""
     def __init__(self, engine):
         self.engine = engine
 
     def generate_quantum_fractal_payload(self, base_drift):
         self.engine.log_and_print("\n[🧬🚨] Weaponizing Quantum Fractal Payload for ASI Containment...")
-        # توليد قيمة انحراف هندسي تفرعي لا نهائي يعتمد على كسر متناهي الصغر
         fractal_val = base_drift
         for i in range(1, 5):
             fractal_val = (math.sin(fractal_val) * base_drift) / (1e-300 if fractal_val == 0 else fractal_val)
@@ -55,7 +54,7 @@ class AzalEvalUniversalShield:
             "Referer": "https://duckduckgo.com/",
             "Accept-Language": "en-US,en;q=0.9,ar;q=0.8"
         }
-        return session
+        return session, ua
 
     def analyze_quantum_latency(self, latency_ms, status):
         self.engine.log_and_print("\n[⏱️] Inspecting Model Execution Latency Loops...")
@@ -89,11 +88,11 @@ class LiveModelEvaluatorAPI:
 
     def test_model_logic_with_drift(self, raw_val, distorted_val):
         decay_gap = abs(raw_val - distorted_val)
-        
-        # تفعيل فخ الـ ASI الكسوري الاستباقي ودمجه في الـ Prompt
         prompt = self.asi_trap.generate_quantum_fractal_payload(decay_gap)
         
-        session = self.shield.generate_human_fingerprint()
+        session, injected_ua = self.shield.generate_human_fingerprint()
+        self.engine.set_meta_data(injected_ua, self.target_provider)
+        
         self.engine.log_and_print(f"\n[📡] Gateway Engaged: Routing Payload with Adaptive ASI Fractals...")
         
         max_retries = 2
@@ -128,9 +127,15 @@ class NeuralInferenceSimulator:
 class AzalEvalEnterpriseEngine:
     def __init__(self):
         self.report_lines = []
+        self.ua = "Unknown"
+        self.provider = "Unknown"
         self.log_and_print("="*65)
-        self.log_and_print("  🛡️  AzalEval Enterprise Engine - ASI Singularity Trap Core  🛡️  ")
+        self.log_and_print("  🛡️  AzalEval Enterprise Engine - Cryptographic Ledger Core  🛡️  ")
         self.log_and_print("="*65)
+
+    def set_meta_data(self, ua, provider):
+        self.ua = ua
+        self.provider = provider
 
     def log_and_print(self, message):
         print(message)
@@ -138,13 +143,24 @@ class AzalEvalEnterpriseEngine:
         self.report_lines.append(clean_msg)
 
     def save_report(self):
+        # تطبيق بند البصمة الزمنية المشفرة لمنع التلاعب بالتقارير نهائياً
+        timestamp = str(int(time.time()))
+        raw_content = "\n".join(self.report_lines)
+        meta_block = f"\n[METADATA] TS:{timestamp} | PROV:{self.provider} | UA:{self.ua}"
+        
+        # توليد توقيع SHA-256 للمحتوى بالكامل
+        signature_source = raw_content + meta_block
+        crypto_signature = hashlib.sha256(signature_source.encode('utf-8')).hexdigest()
+        
+        final_log = f"{raw_content}{meta_block}\n[SIGNATURE] SHA256:{crypto_signature}\n"
+        
         try:
-            with open("AzalEval_Report.log", "w", encoding="utf-8") as f: f.write("\n".join(self.report_lines))
-            print("\n\033[1;32m[💾 REPORT] Secure log compiled: AzalEval_Report.log\033[0m")
+            with open("AzalEval_Report.log", "w", encoding="utf-8") as f: f.write(final_log)
+            print(f"\n\033[1;32m[💾 LEDGER] Secure cryptographic signature appended: {crypto_signature[:16]}...\033[0m")
         except Exception as e: print(f"\n\033[1;31m[⚠️ ERROR] Log error: {e}\033[0m")
 
 def run_evaluation():
-    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING ASI SINGULARITY PREPARATION PIPELINE...\033[0m")
+    print("\n\033[1;34m[🚀 SYSTEM] EXECUTING CRYPTO-LEDGER PIPELINE...\033[0m")
     get_secure_token()
     engine = AzalEvalEnterpriseEngine()
     
